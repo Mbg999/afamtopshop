@@ -1,12 +1,12 @@
-import { AbstractMigration, ClientMySQL, Info } from "../../deps.ts";
+import { AbstractMigration, ClientMySQL, Info } from "../../../deps.ts";
 
 export default class extends AbstractMigration<ClientMySQL> {
   /** Runs on migrate */
   async up(info: Info): Promise<void> {
     await this.client.execute(
       `CREATE TABLE images(
-        id BINARY(16) DEFAULT (UNHEX(REPLACE(UUID(), '-', ''))),
-        productId BINARY(16) NOT NULL,
+        id CHAR(36) DEFAULT (UUID()),
+        productId CHAR(36) NOT NULL,
         name VARCHAR(50),
         url VARCHAR(255),
         createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

@@ -1,12 +1,12 @@
 import { ClientMySQL, NessieConfig } from "./deps.ts";
-import { DB } from "./db/db.ts";
-const client = new ClientMySQL(DB.MYSQL_CONFIG);
+import { DBConnectionMySql } from "./persistence/db-connection-mysql.ts";
+const client = new ClientMySQL(DBConnectionMySql.MYSQL_CONFIG);
 
 /** This is the final config object */
 const config: NessieConfig = {
   client,
-  migrationFolders: ["./db/migrations"],
-  seedFolders: ["./db/seeds"],
+  migrationFolders: ["./persistence/migrations/mysql"],
+  seedFolders: ["./persistence/seeds/mysql"],
 };
 
 export default config;

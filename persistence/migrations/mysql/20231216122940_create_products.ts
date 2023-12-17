@@ -1,4 +1,4 @@
-import { AbstractMigration, ClientMySQL, Info } from "../../deps.ts";
+import { AbstractMigration, ClientMySQL, Info } from "../../../deps.ts";
 
 export default class extends AbstractMigration<ClientMySQL> {
   /** Runs on migrate */
@@ -6,10 +6,10 @@ export default class extends AbstractMigration<ClientMySQL> {
     // uuid https://stackoverflow.com/a/46134649
     await this.client.execute(
       `CREATE TABLE products (
-        id BINARY(16) DEFAULT (UNHEX(REPLACE(UUID(), '-', ''))),
+        id CHAR(36) DEFAULT (UUID()),
         name VARCHAR(50) NOT NULL,
         description varchar(500),
-        categoryId BINARY(16),
+        categoryId CHAR(36),
         createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updatedAt TIMESTAMP NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
         deletedAt TIMESTAMP NULL DEFAULT NULL,
