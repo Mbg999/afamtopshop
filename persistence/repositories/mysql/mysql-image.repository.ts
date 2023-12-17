@@ -1,13 +1,13 @@
 import { Log } from "../../../utils/log.utils.ts";
 import { generateUUIDV5 } from "../../../utils/uuid.utils.ts";
 import { Image } from "../../../domain/image.model.ts";
-import { DBConnectionMySql } from "../../db-connection-mysql.ts";
+import { DBMySql } from "./db-mysql.ts";
 import { createdItem } from "../base.repository.ts";
 import { ImageRepository } from "../image.repository.ts";
 
-export class MySQLImageRepository extends ImageRepository<DBConnectionMySql> {
+export class MySQLImageRepository extends ImageRepository<DBMySql> {
   constructor() {
-    super(new DBConnectionMySql());
+    super(new DBMySql());
   }
 
   async getImagesFromAProduct(productId: string): Promise<Image[]> {

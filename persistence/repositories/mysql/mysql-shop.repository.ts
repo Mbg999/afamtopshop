@@ -1,13 +1,13 @@
 import { Log } from "../../../utils/log.utils.ts";
 import { generateUUIDV5 } from "../../../utils/uuid.utils.ts";
 import { Shop } from "../../../domain/shop.model.ts";
-import { DBConnectionMySql } from "../../db-connection-mysql.ts";
+import { DBMySql } from "./db-mysql.ts";
 import { createdItem } from "../base.repository.ts";
 import { ShopRepository } from "../shop.repository.ts";
 
-export class MySQLShopRepository extends ShopRepository<DBConnectionMySql> {
+export class MySQLShopRepository extends ShopRepository<DBMySql> {
   constructor() {
-    super(new DBConnectionMySql());
+    super(new DBMySql());
   }
 
   async getAll(): Promise<Shop[]> {

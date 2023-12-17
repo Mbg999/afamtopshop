@@ -1,3 +1,4 @@
+import { DBMySql } from "./mysql/db-mysql.ts";
 import { MySQLArticleTagRepository } from "./mysql/mysql-article-tag.repository.ts";
 import { MySQLArticleRepository } from "./mysql/mysql-article.repository.ts";
 import { MySQLCategoryRepository } from "./mysql/mysql-category.repository.ts";
@@ -8,6 +9,7 @@ import { MySQLShopProductRepository } from "./mysql/mysql-shop-product.repositor
 import { MySQLShopRepository } from "./mysql/mysql-shop.repository.ts";
 import { MySQLTagRepository } from "./mysql/mysql-tag.repository.ts";
 
+export const dbImpl = () => new DBMySql();
 export const categoryRepositoryImpl = () => new MySQLCategoryRepository();
 export const shopRepositoryImpl = () => new MySQLShopRepository();
 export const tagRepositoryImpl = () => new MySQLTagRepository();

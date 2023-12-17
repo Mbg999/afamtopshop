@@ -1,13 +1,13 @@
 import { Log } from "../../../utils/log.utils.ts";
 import { generateUUIDV5 } from "../../../utils/uuid.utils.ts";
 import { Tag } from "../../../domain/tag.model.ts";
-import { DBConnectionMySql } from "../../db-connection-mysql.ts";
+import { DBMySql } from "./db-mysql.ts";
 import { createdItem } from "../base.repository.ts";
 import { TagRepository } from "../tag.repository.ts";
 
-export class MySQLTagRepository extends TagRepository<DBConnectionMySql> {
+export class MySQLTagRepository extends TagRepository<DBMySql> {
   constructor() {
-    super(new DBConnectionMySql());
+    super(new DBMySql());
   }
 
   async getTagsFromIdList(ids: string[]): Promise<Tag[]> {

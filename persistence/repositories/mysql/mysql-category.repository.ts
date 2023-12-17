@@ -1,14 +1,14 @@
 import { Log } from "../../../utils/log.utils.ts";
 import { generateUUIDV5 } from "../../../utils/uuid.utils.ts";
 import { Category } from "../../../domain/category.model.ts";
-import { DBConnectionMySql } from "../../db-connection-mysql.ts";
+import { DBMySql } from "./db-mysql.ts";
 import { createdItem } from "../base.repository.ts";
 import { CategoryRepository } from "../category.repository.ts";
 
 export class MySQLCategoryRepository
-  extends CategoryRepository<DBConnectionMySql> {
+  extends CategoryRepository<DBMySql> {
   constructor() {
-    super(new DBConnectionMySql());
+    super(new DBMySql());
   }
 
   async getRootCategories(): Promise<Category[]> {

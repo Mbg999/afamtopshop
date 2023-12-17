@@ -1,14 +1,14 @@
 import { Log } from "../../../utils/log.utils.ts";
 import { generateUUIDV5 } from "../../../utils/uuid.utils.ts";
 import { Product } from "../../../domain/product.model.ts";
-import { DBConnectionMySql } from "../../db-connection-mysql.ts";
+import { DBMySql } from "./db-mysql.ts";
 import { createdItem } from "../base.repository.ts";
 import { ProductRepository } from "../product.repository.ts";
 
 export class MySQLProductRepository
-  extends ProductRepository<DBConnectionMySql> {
+  extends ProductRepository<DBMySql> {
   constructor() {
-    super(new DBConnectionMySql());
+    super(new DBMySql());
   }
 
   async getAll(): Promise<Product[]> {
