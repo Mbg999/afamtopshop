@@ -11,9 +11,13 @@ export abstract class BaseRepository<DBConnectionT, T> {
 
   abstract getById(id: string): Promise<T>;
 
-  abstract create(item: T): Promise<createdItem>;
+  abstract create(
+    item: Omit<T, "id" | "createdAt" | "updatedAt" | "deletedAt">,
+  ): Promise<createdItem>;
 
-  abstract update(item: T): Promise<boolean>;
+  abstract update(
+    item: Omit<T, "createdAt" | "updatedAt" | "deletedAt">,
+  ): Promise<boolean>;
 
   abstract delete(id: string): Promise<boolean>;
 }
