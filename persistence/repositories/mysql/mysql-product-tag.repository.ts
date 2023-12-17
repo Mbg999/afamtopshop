@@ -22,11 +22,11 @@ export class MySQLProductTagRepository
     });
   }
 
-  async getTagsFromProductId(ProductId: string): Promise<ProductTag[]> {
+  async getTagsFromProductId(productId: string): Promise<ProductTag[]> {
     const conn = await this.dbConnection.getConnection();
     return await conn.query(
       "SELECT * FROM product_tag WHERE productId LIKE ?",
-      [ProductId],
+      [productId],
     ).catch((error) => {
       MySQLProductTagRepository.logError("getTagsFromProductId", error);
       return error;
