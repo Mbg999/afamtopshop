@@ -1,3 +1,4 @@
+import { MySQLArticleTagRepository } from "./mysql/mysql-article-tag.repository.ts";
 import { MySQLArticleRepository } from "./mysql/mysql-article.repository.ts";
 import { MySQLCategoryRepository } from "./mysql/mysql-category.repository.ts";
 import { MySQLImageRepository } from "./mysql/mysql-image.repository.ts";
@@ -11,3 +12,4 @@ export const tagRepositoryImpl = () => new MySQLTagRepository();
 export const productRepositoryImpl = () => new MySQLProductRepository();
 export const articleRepositoryImpl = () => new MySQLArticleRepository();
 export const imageRepositoryImpl = () => new MySQLImageRepository();
+export const articleTagRepositoryImpl = () => new MySQLArticleTagRepository();
