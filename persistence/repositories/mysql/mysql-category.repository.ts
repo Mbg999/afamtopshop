@@ -99,6 +99,6 @@ export class MySQLCategoryRepository
   }
 
   private static logError(methodName: string, error: any): void {
-    Log.error("mysql/category.repository", methodName, error);
+    Log.error("mysql/mysql-category.repository", methodName, error);
   }
 }
