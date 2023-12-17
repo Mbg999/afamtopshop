@@ -11,24 +11,6 @@ export class MySQLCategoryRepository
     super(new DBConnectionMySql());
   }
 
-  async getAll(): Promise<Category[]> {
-    const conn = await this.dbConnection.getConnection();
-    return await conn.query("SELECT * FROM categories").catch((error) => {
-      MySQLCategoryRepository.logError("getAll", error);
-      return error;
-    });
-  }
-
-  async getById(id: string): Promise<Category> {
-    const conn = await this.dbConnection.getConnection();
-    return await conn.query("SELECT * FROM categories WHERE id LIKE ?", [
-      id,
-    ]).catch((error) => {
-      MySQLCategoryRepository.logError("getById", error);
-      return error;
-    });
-  }
-
   async getRootCategories(): Promise<Category[]> {
     const conn = await this.dbConnection.getConnection();
     return await conn.query("SELECT * FROM categories WHERE parentId IS NULL")
@@ -47,6 +29,24 @@ export class MySQLCategoryRepository
         MySQLCategoryRepository.logError("getSubcategories", error);
         return error;
       });
+  }
+
+  async getAll(): Promise<Category[]> {
+    const conn = await this.dbConnection.getConnection();
+    return await conn.query("SELECT * FROM categories").catch((error) => {
+      MySQLCategoryRepository.logError("getAll", error);
+      return error;
+    });
+  }
+
+  async getById(id: string): Promise<Category> {
+    const conn = await this.dbConnection.getConnection();
+    return await conn.query("SELECT * FROM categories WHERE id LIKE ?", [
+      id,
+    ]).catch((error) => {
+      MySQLCategoryRepository.logError("getById", error);
+      return error;
+    });
   }
 
   async create(

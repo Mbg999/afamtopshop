@@ -10,6 +10,18 @@ export class MySQLTagRepository extends TagRepository<DBConnectionMySql> {
     super(new DBConnectionMySql());
   }
 
+  async getTagsFromIdList(ids: string[]): Promise<Tag[]> {
+    const conn = await this.dbConnection.getConnection();
+    return await conn.query(
+      `SELECT * FROM tags WHERE id IN (${
+        ids.map((id) => "'" + id + "'").join(", ")
+      })`,
+    ).catch((error) => {
+      MySQLTagRepository.logError("getAll", error);
+      return error;
+    });
+  }
+
   async getAll(): Promise<Tag[]> {
     const conn = await this.dbConnection.getConnection();
     return await conn.query("SELECT * FROM tags").catch((error) => {
@@ -24,18 +36,6 @@ export class MySQLTagRepository extends TagRepository<DBConnectionMySql> {
       id,
     ]).catch((error) => {
       MySQLTagRepository.logError("getById", error);
-      return error;
-    });
-  }
-
-  async getTagsFromIdList(ids: string[]): Promise<Tag[]> {
-    const conn = await this.dbConnection.getConnection();
-    return await conn.query(
-      `SELECT * FROM tags WHERE id IN (${
-        ids.map((id) => "'" + id + "'").join(", ")
-      })`,
-    ).catch((error) => {
-      MySQLTagRepository.logError("getAll", error);
       return error;
     });
   }

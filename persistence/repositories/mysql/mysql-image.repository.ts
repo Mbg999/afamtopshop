@@ -10,6 +10,17 @@ export class MySQLImageRepository extends ImageRepository<DBConnectionMySql> {
     super(new DBConnectionMySql());
   }
 
+  async getImagesFromAProduct(productId: string): Promise<Image[]> {
+    const conn = await this.dbConnection.getConnection();
+    return await conn.query(
+      "SELECT * FROM images WHERE productId LIKE ?",
+      [productId],
+    ).catch((error) => {
+      MySQLImageRepository.logError("getAll", error);
+      return error;
+    });
+  }
+
   async getAll(): Promise<Image[]> {
     const conn = await this.dbConnection.getConnection();
     return await conn.query("SELECT * FROM images").catch((error) => {
@@ -24,17 +35,6 @@ export class MySQLImageRepository extends ImageRepository<DBConnectionMySql> {
       id,
     ]).catch((error) => {
       MySQLImageRepository.logError("getById", error);
-      return error;
-    });
-  }
-
-  async getImagesFromAProduct(productId: string): Promise<Image[]> {
-    const conn = await this.dbConnection.getConnection();
-    return await conn.query(
-      "SELECT * FROM images WHERE productId LIKE ?",
-      [productId],
-    ).catch((error) => {
-      MySQLImageRepository.logError("getAll", error);
       return error;
     });
   }
