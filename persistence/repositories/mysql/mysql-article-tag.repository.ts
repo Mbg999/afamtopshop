@@ -1,6 +1,6 @@
 import { Log } from "../../../utils/log.utils.ts";
 import { generateUUIDV5 } from "../../../utils/uuid.utils.ts";
-import { ArticleTag } from "../../../domain/article-tag.ts";
+import { ArticleTag } from "../../../domain/article-tag.model.ts";
 import { DBConnectionMySql } from "../../db-connection-mysql.ts";
 import { createdItem } from "../base.repository.ts";
 import { ArticleTagRepository } from "../article-tag.repository.ts";

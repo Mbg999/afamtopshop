@@ -1,4 +1,4 @@
-import { Image } from "../../domain/image.ts";
+import { Image } from "../../domain/image.model.ts";
 import { BaseRepository } from "./base.repository.ts";
 
 export abstract class ImageRepository<DBConnectionT>
