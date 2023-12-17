@@ -6,7 +6,7 @@ import { createdItem } from "../base.repository.ts";
 import { CategoryRepository } from "../category.repository.ts";
 
 export class MySQLCategoryRepository
-  extends CategoryRepository<DBConnectionMySql, Category> {
+  extends CategoryRepository<DBConnectionMySql> {
   constructor() {
     super(new DBConnectionMySql());
   }
