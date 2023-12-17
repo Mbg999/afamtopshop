@@ -1,62 +1,74 @@
 import { Log } from "../../../utils/log.utils.ts";
 import { generateUUIDV5 } from "../../../utils/uuid.utils.ts";
-import { Shop } from "../../../domain/shop.ts";
+import { Tag } from "../../../domain/tag.ts";
 import { DBConnectionMySql } from "../../db-connection-mysql.ts";
 import { createdItem } from "../base.repository.ts";
-import { ShopRepository } from "../shop.repository.ts";
+import { TagRepository } from "../tag.repository.ts";
 
-export class MySQLShopRepository extends ShopRepository<DBConnectionMySql> {
+export class MySQLTagRepository extends TagRepository<DBConnectionMySql> {
   constructor() {
     super(new DBConnectionMySql());
   }
 
-  async getAll(): Promise<Shop[]> {
+  async getAll(): Promise<Tag[]> {
     const conn = await this.dbConnection.getConnection();
-    return await conn.query("SELECT * FROM shops").catch((error) => {
-      MySQLShopRepository.logError("getAll", error);
+    return await conn.query("SELECT * FROM tags").catch((error) => {
+      MySQLTagRepository.logError("getAll", error);
       return error;
     });
   }
 
-  async getById(id: string): Promise<Shop> {
+  async getById(id: string): Promise<Tag> {
     const conn = await this.dbConnection.getConnection();
-    return await conn.query("SELECT * FROM shops WHERE id LIKE ?", [
+    return await conn.query("SELECT * FROM tags WHERE id LIKE ?", [
       id,
     ]).catch((error) => {
-      MySQLShopRepository.logError("getById", error);
+      MySQLTagRepository.logError("getById", error);
+      return error;
+    });
+  }
+
+  async getTagsFromIdList(ids: string[]): Promise<Tag[]> {
+    const conn = await this.dbConnection.getConnection();
+    return await conn.query(
+      `SELECT * FROM tags WHERE id IN (${
+        ids.map((id) => "'" + id + "'").join(", ")
+      })`,
+    ).catch((error) => {
+      MySQLTagRepository.logError("getAll", error);
       return error;
     });
   }
 
   async create(
-    item: Omit<Shop, "id" | "createdAt" | "updatedAt" | "deletedAt">,
+    item: Omit<Tag, "id" | "createdAt" | "updatedAt" | "deletedAt">,
   ): Promise<createdItem> {
     const conn = await this.dbConnection.getConnection();
     const id = await generateUUIDV5();
     return await conn.execute(
-      "INSERT INTO shops (id, name) VALUES (?, ?)",
+      "INSERT INTO tags (id, name) VALUES (?, ?)",
       [
         id,
         item.name,
       ],
     ).then((r) => r.affectedRows ? { id } : null).catch((error) => {
-      MySQLShopRepository.logError("create", error);
+      MySQLTagRepository.logError("create", error);
       return error;
     });
   }
 
   async update(
-    item: Omit<Shop, "createdAt" | "updatedAt" | "deletedAt">,
+    item: Omit<Tag, "createdAt" | "updatedAt" | "deletedAt">,
   ): Promise<boolean> {
     const conn = await this.dbConnection.getConnection();
     return await conn.execute(
-      "UPDATE shops SET name = ? WHERE id like ?",
+      "UPDATE tags SET name = ? WHERE id like ?",
       [
         item.name,
         item.id,
       ],
     ).then((r) => !!r?.affectedRows).catch((error) => {
-      MySQLShopRepository.logError("update", error);
+      MySQLTagRepository.logError("update", error);
       return error;
     });
   }
@@ -64,17 +76,17 @@ export class MySQLShopRepository extends ShopRepository<DBConnectionMySql> {
   async delete(id: string): Promise<boolean> {
     const conn = await this.dbConnection.getConnection();
     return await conn.execute(
-      "DELETE FROM shops WHERE id like ?",
+      "DELETE FROM tags WHERE id like ?",
       [
         id,
       ],
     ).then((r) => !!r?.affectedRows).catch((error) => {
-      MySQLShopRepository.logError("delete", error);
+      MySQLTagRepository.logError("delete", error);
       return error;
     });
   }
 
   private static logError(methodName: string, error: any): void {
-    Log.error("mysql/mysql-shop.repository", methodName, error);
+    Log.error("mysql/mysql-tag.repository", methodName, error);
   }
 }

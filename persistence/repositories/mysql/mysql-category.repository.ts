@@ -85,7 +85,6 @@ export class MySQLCategoryRepository
   }
 
   async delete(id: string): Promise<boolean> {
-    // TODO: ver el ExecuteResult
     const conn = await this.dbConnection.getConnection();
     return await conn.execute(
       "DELETE FROM categories WHERE id like ?",
