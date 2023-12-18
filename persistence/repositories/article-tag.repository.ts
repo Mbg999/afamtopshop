@@ -1,4 +1,4 @@
-import { ArticleTag } from "../../domain/article-tag.model.ts";
+import { ArticleTag } from "../../domain/article-tag.ts";
 import { BaseRepository } from "./base.repository.ts";
 
 export abstract class ArticleTagRepository<DBConnectionT>

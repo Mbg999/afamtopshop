@@ -1,4 +1,4 @@
-import { Category } from "../../domain/category.model.ts";
+import { Category } from "../../domain/category.ts";
 import { BaseRepository } from "./base.repository.ts";
 
 export abstract class CategoryRepository<DBConnectionT>

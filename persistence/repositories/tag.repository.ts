@@ -1,4 +1,4 @@
-import { Tag } from "../../domain/tag.model.ts";
+import { Tag } from "../../domain/tag.ts";
 import { BaseRepository } from "./base.repository.ts";
 
 export abstract class TagRepository<DBConnectionT>

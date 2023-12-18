@@ -1,4 +1,4 @@
-import { ShopProduct } from "../../domain/shop-product.model.ts";
+import { ShopProduct } from "../../domain/shop-product.ts";
 import { BaseRepository } from "./base.repository.ts";
 
 export abstract class ShopProductRepository<DBConnectionT>

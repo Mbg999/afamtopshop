@@ -1,4 +1,4 @@
-import { Article } from "../../domain/article.model.ts";
+import { Article } from "../../domain/article.ts";
 import { BaseRepository } from "./base.repository.ts";
 
 export abstract class ArticleRepository<DBConnectionT>

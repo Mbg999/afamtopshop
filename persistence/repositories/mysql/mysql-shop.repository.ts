@@ -1,6 +1,6 @@
 import { Log } from "../../../utils/log.utils.ts";
 import { generateUUIDV5 } from "../../../utils/uuid.utils.ts";
-import { Shop } from "../../../domain/shop.model.ts";
+import { Shop } from "../../../domain/shop.ts";
 import { DBMySql } from "./db-mysql.ts";
 import { createdItem } from "../base.repository.ts";
 import { ShopRepository } from "../shop.repository.ts";
