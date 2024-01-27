@@ -5,10 +5,19 @@ import { DBMySql } from "./db-mysql.ts";
 import { createdItem } from "../base.repository.ts";
 import { ProductRepository } from "../product.repository.ts";
 
-export class MySQLProductRepository
-  extends ProductRepository<DBMySql> {
+export class MySQLProductRepository extends ProductRepository<DBMySql> {
   constructor() {
     super(new DBMySql());
+  }
+
+  async searchByName(name: string): Promise<Product[]> {
+    const conn = await this.dbConnection.getConnection();
+    return await conn.query("SELECT * FROM products WHERE name LIKE ?", [
+      `%${name}%`,
+    ]).catch((error) => {
+      MySQLProductRepository.logError("searchByName", error);
+      throw error;
+    });
   }
 
   async getAll(): Promise<Product[]> {

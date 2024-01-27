@@ -6,4 +6,6 @@ export abstract class ProductRepository<DBConnectionT>
   constructor(dbConnection: DBConnectionT) {
     super(dbConnection);
   }
+
+  abstract searchByName(name: string): Promise<Product[]>;
 }
