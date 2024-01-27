@@ -6,4 +6,5 @@ export interface ShopProduct {
   createdAt: number;
   updatedAt: number | null;
   deletedAt: number | null;
+  shopName?: string;
 }

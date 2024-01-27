@@ -1,7 +1,7 @@
-import { DB } from "../db/db.ts";
+import { categoryRepositoryImpl } from "../persistence/repositories/repositories.impl.ts";
 
 export default async function Hello() {
-  const users = await getUsers();
+  const items = await getItems();
   return (
     <div>
       <h1>hola mundo</h1>
@@ -30,25 +30,28 @@ export default async function Hello() {
           </a>
         </li>
       </ul>
-      <hr/>
-      <ul>
-        {users.map((user) => (
-          <li key={user.id}>{user.email}</li>
+      <hr />
+      {/* <ul>
+        {items.map((items) => (
+          <li key={items.id}>{JSON.stringify(items)}</li>
         ))}
-      </ul>
+      </ul> */}
     </div>
   );
 }
 
-async function getUsers(): Promise<any[]> {
-  let users;
+async function getItems(): Promise<any> {
+  let items;
   try {
-    const connection = await DB.getConnection();
-    users = await connection.query("SELECT * FROM users");
+    // const db = new DBMySql()
+    // const conn = await db.getConnection()
+    // items = await conn.query("SELECT c.* FROM categories as c")
+    const rep = categoryRepositoryImpl();
+    items = await rep.delete("0001bf80-9cc7-11ee-bb5a-d8bbc121855d");
+    console.log(items);
   } catch (err) {
-    users = [];
+    items = Promise.resolve([]);
     console.error(err);
-    DB.closeConnection();
   }
-  return users;
+  return items;
 }

@@ -8,4 +8,9 @@ export abstract class ProductRepository<DBConnectionT>
   }
 
   abstract searchByName(name: string): Promise<Product[]>;
+
+  abstract getLatestPaginated(
+    offset: number,
+    limit: number,
+  ): Promise<Product[]>;
 }

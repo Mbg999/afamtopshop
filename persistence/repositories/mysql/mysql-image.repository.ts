@@ -10,13 +10,26 @@ export class MySQLImageRepository extends ImageRepository<DBMySql> {
     super(new DBMySql());
   }
 
+  async getAllFromMultipleProducts(productIds: string[]): Promise<Image[]> {
+    const conn = await this.dbConnection.getConnection();
+    return await conn.query(
+      `SELECT * FROM images WHERE productId IN (${
+        "?,".repeat(productIds.length).slice(0, -1)
+      })`,
+      productIds,
+    ).catch((error) => {
+      MySQLImageRepository.logError("getAllFromMultipleProducts", error);
+      return error;
+    });
+  }
+
   async getImagesFromAProduct(productId: string): Promise<Image[]> {
     const conn = await this.dbConnection.getConnection();
     return await conn.query(
       "SELECT * FROM images WHERE productId LIKE ?",
       [productId],
     ).catch((error) => {
-      MySQLImageRepository.logError("getAll", error);
+      MySQLImageRepository.logError("getImagesFromAProduct", error);
       return error;
     });
   }

@@ -8,6 +8,6 @@ export abstract class ShopProductRepository<DBConnectionT>
   }
 
   abstract getShopsFromProductId(productId: string): Promise<ShopProduct[]>;
-
   abstract getProductsFromShopId(shopId: string): Promise<ShopProduct[]>;
+  abstract getAllFromMultipleProducts(productIds: string[]): Promise<ShopProduct[]>;
 }

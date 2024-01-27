@@ -8,4 +8,5 @@ export abstract class ImageRepository<DBConnectionT>
   }
 
   abstract getImagesFromAProduct(productId: string): Promise<Image[]>;
+  abstract getAllFromMultipleProducts(productIds: string[]): Promise<Image[]>;
 }

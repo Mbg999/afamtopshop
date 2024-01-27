@@ -5,10 +5,24 @@ import { DBMySql } from "./db-mysql.ts";
 import { createdItem } from "../base.repository.ts";
 import { ShopProductRepository } from "../shop-product.repository.ts";
 
-export class MySQLShopProductRepository
-  extends ShopProductRepository<DBMySql> {
+export class MySQLShopProductRepository extends ShopProductRepository<DBMySql> {
   constructor() {
     super(new DBMySql());
+  }
+
+  async getAllFromMultipleProducts(
+    productIds: string[],
+  ): Promise<ShopProduct[]> {
+    const conn = await this.dbConnection.getConnection();
+    return await conn.query(
+      `SELECT sp.*, s.name as shopName FROM shop_product sp JOIN shops s ON s.id LIKE sp.shopId WHERE sp.productId IN (${
+        "?,".repeat(productIds.length).slice(0, -1)
+      })`,
+      productIds,
+    ).catch((error) => {
+      MySQLShopProductRepository.logError("getAllFromMultipleProducts", error);
+      return error;
+    });
   }
 
   async getShopsFromProductId(productId: string): Promise<ShopProduct[]> {

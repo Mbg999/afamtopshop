@@ -5,4 +5,5 @@ export interface ProductTag {
   createdAt: number;
   updatedAt: number | null;
   deletedAt: number | null;
+  tagName?: string;
 }

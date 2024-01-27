@@ -5,10 +5,24 @@ import { DBMySql } from "./db-mysql.ts";
 import { createdItem } from "../base.repository.ts";
 import { ProductTagRepository } from "../product-tag.repository.ts";
 
-export class MySQLProductTagRepository
-  extends ProductTagRepository<DBMySql> {
+export class MySQLProductTagRepository extends ProductTagRepository<DBMySql> {
   constructor() {
     super(new DBMySql());
+  }
+
+  async getAllFromMultipleProducts(
+    productIds: string[],
+  ): Promise<ProductTag[]> {
+    const conn = await this.dbConnection.getConnection();
+    return await conn.query(
+      `SELECT pt.*, t.name as tagName FROM product_tag pt JOIN tags t ON t.id LIKE pt.tagId WHERE pt.productId IN (${
+        "?,".repeat(productIds.length).slice(0, -1)
+      })`,
+      productIds,
+    ).catch((error) => {
+      MySQLProductTagRepository.logError("getAllFromMultipleProducts", error);
+      return error;
+    });
   }
 
   async getProductsFromTagId(tagId: string): Promise<ProductTag[]> {
