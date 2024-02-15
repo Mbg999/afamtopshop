@@ -3,7 +3,7 @@ import Navbar from "../islands/Navbar.tsx";
 
 export default async function Layout(req: Request, ctx: FreshContext) {
   return (
-    <div class="layout">
+    <div class="layout container-lg">
       <Navbar />
       <p>layout</p>
       <ctx.Component />
