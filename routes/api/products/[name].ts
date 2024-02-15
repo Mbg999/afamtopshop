@@ -8,7 +8,6 @@ export const handler: Handlers = {
     let status: number;
     try {
       const products = await new SearchProductsByName().invoke(ctx.params.name);
-      console.log("llega2");
       body["data"] = products;
       body["ok"] = true;
       status = 200;

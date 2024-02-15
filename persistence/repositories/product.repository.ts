@@ -9,6 +9,8 @@ export abstract class ProductRepository<DBConnectionT>
 
   abstract searchByName(name: string): Promise<Product[]>;
 
+  abstract getByName(name: string): Promise<Product | undefined>;
+
   abstract getLatestPaginated(
     offset: number,
     limit: number,

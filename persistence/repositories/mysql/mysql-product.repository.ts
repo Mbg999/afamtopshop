@@ -80,6 +80,18 @@ export class MySQLProductRepository extends ProductRepository<DBMySql> {
     });
   }
 
+  async getByName(name: string): Promise<Product | undefined> {
+    const conn = await this.dbConnection.getConnection();
+    return await conn.query("SELECT * FROM products WHERE name LIKE ?", [
+      name,
+    ]).then((r: Product[]) => r?.length > 0 ? r[0] : undefined).catch(
+      (error) => {
+        MySQLProductRepository.logError("getByName", error);
+        return error;
+      },
+    );
+  }
+
   async getById(id: string): Promise<Product> {
     const conn = await this.dbConnection.getConnection();
     return await conn.query("SELECT * FROM products WHERE id LIKE ?", [

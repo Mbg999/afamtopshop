@@ -9,8 +9,9 @@ import * as $api_joke from "./routes/api/joke.ts";
 import * as $api_products_name_ from "./routes/api/products/[name].ts";
 import * as $greet_name_ from "./routes/greet/[name].tsx";
 import * as $hello from "./routes/hello.tsx";
+import * as $index_old from "./routes/index.old.tsx";
 import * as $index from "./routes/index.tsx";
-import * as $prueba from "./routes/prueba.tsx";
+import * as $products_name_ from "./routes/products/[name].tsx";
 import * as $Counter from "./islands/Counter.tsx";
 import * as $Navbar from "./islands/Navbar.tsx";
 import { type Manifest } from "$fresh/server.ts";
@@ -24,8 +25,9 @@ const manifest = {
     "./routes/api/products/[name].ts": $api_products_name_,
     "./routes/greet/[name].tsx": $greet_name_,
     "./routes/hello.tsx": $hello,
+    "./routes/index.old.tsx": $index_old,
     "./routes/index.tsx": $index,
-    "./routes/prueba.tsx": $prueba,
+    "./routes/products/[name].tsx": $products_name_,
   },
   islands: {
     "./islands/Counter.tsx": $Counter,

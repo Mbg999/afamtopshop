@@ -1,26 +1,46 @@
-let timeBweteenRequests: number;
+import { useState } from "preact/hooks";
+import { Product } from "../domain/product.ts";
 
 export default function Navbar() {
+  const [products, setProducts] = useState([] as Product[]);
+  let timeBweteenRequests: number;
+
+  const searchProduct = (event: Event) => {
+    const value = (event.target as HTMLInputElement).value.trim();
+    if (timeBweteenRequests) {
+      clearTimeout(timeBweteenRequests);
+    }
+    if (value) {
+      timeBweteenRequests = setTimeout(() => {
+        fetch(`/api/products/${value}`)
+          .then((r) => r.json())
+          .then((r) => setProducts(r.ok ? r.data : []));
+      }, 500);
+    } else {
+      setProducts([]);
+    }
+  };
+
   return (
     <nav>
       <div>
         <h3>afamtopshop</h3>
       </div>
       <div>
-        <input type="search" placeholder="Buscar..." onInput={search} />
+        <input type="search" placeholder="Buscar..." onInput={searchProduct} />
+        {JSON.stringify(products)}
+        {products?.length ? (
+          <ul>
+            {products.map((p) => (
+              <li>
+                <a href={"/products/" + p.name}>{p.name}</a>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          ""
+        )}
       </div>
     </nav>
   );
-}
-
-function search(event: Event): void {
-  const value = (event.target as HTMLInputElement).value;
-  if (timeBweteenRequests) {
-    clearTimeout(timeBweteenRequests);
-  }
-  timeBweteenRequests = setTimeout(() => {
-    fetch(`/api/products/${value}`)
-      .then((r) => r.json())
-      .then((r) => console.log(r));
-  }, 500);
 }
