@@ -12,7 +12,7 @@ export default function Navbar() {
     }
     if (value) {
       timeBweteenRequests = setTimeout(() => {
-        fetch(`/api/products/${value}`)
+        fetch(`/api/products/${encodeURIComponent(value)}`)
           .then((r) => r.json())
           .then((r) => setProducts(r.ok ? r.data : []));
       }, 500);
@@ -24,7 +24,9 @@ export default function Navbar() {
   return (
     <nav>
       <div>
-        <h3>afamtopshop</h3>
+        <h3>
+          <a href="/">afamtopshop</a>
+        </h3>
       </div>
       <div>
         <input type="search" placeholder="Buscar..." onInput={searchProduct} />

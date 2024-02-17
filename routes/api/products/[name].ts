@@ -7,7 +7,9 @@ export const handler: Handlers = {
     const body: ApiBodyResponse = {};
     let status: number;
     try {
-      const products = await new SearchProductsByName().invoke(ctx.params.name);
+      const products = await new SearchProductsByName().invoke(
+        decodeURIComponent(ctx.params.name),
+      );
       body["data"] = products;
       body["ok"] = true;
       status = 200;

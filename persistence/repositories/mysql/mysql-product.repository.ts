@@ -82,14 +82,36 @@ export class MySQLProductRepository extends ProductRepository<DBMySql> {
 
   async getByName(name: string): Promise<Product | undefined> {
     const conn = await this.dbConnection.getConnection();
-    return await conn.query("SELECT * FROM products WHERE name LIKE ?", [
-      name,
-    ]).then((r: Product[]) => r?.length > 0 ? r[0] : undefined).catch(
+    const product: Product = await conn.query(
+      "SELECT p.*, c.name as categoryName FROM products p JOIN categories c ON c.id LIKE p.categoryId WHERE p.name LIKE ?",
+      [
+        name,
+      ],
+    ).then((r: Product[]) => r?.length > 0 ? r[0] : undefined).catch(
       (error) => {
         MySQLProductRepository.logError("getByName", error);
         return error;
       },
     );
+
+    const imageRepository = imageRepositoryImpl();
+    product.images = await imageRepository.getImagesFromAProduct(
+      product.id,
+    );
+
+    const shopProductRepository = shopProductRepositoryImpl();
+    product.urls = await shopProductRepository
+      .getShopsFromProductId(
+        product.id,
+      );
+
+    const productTagRepository = productTagRepositoryImpl();
+    product.tags = await productTagRepository
+      .getTagsFromProductId(
+        product.id,
+      );
+
+    return product;
   }
 
   async getById(id: string): Promise<Product> {

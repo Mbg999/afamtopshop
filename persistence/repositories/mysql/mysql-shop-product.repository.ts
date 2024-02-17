@@ -28,7 +28,7 @@ export class MySQLShopProductRepository extends ShopProductRepository<DBMySql> {
   async getShopsFromProductId(productId: string): Promise<ShopProduct[]> {
     const conn = await this.dbConnection.getConnection();
     return await conn.query(
-      "SELECT * FROM shop_product WHERE productId LIKE ?",
+      "SELECT sp.*, s.name as shopName FROM shop_product sp JOIN shops s ON s.id LIKE sp.shopId WHERE sp.productId LIKE ?",
       [productId],
     ).catch((error) => {
       MySQLShopProductRepository.logError("getShopsFromProductId", error);

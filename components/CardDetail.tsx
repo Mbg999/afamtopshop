@@ -1,13 +1,13 @@
 import { CardVM } from "../presentation/view-model/card-vm.ts";
 import ImgCarousel from "./ImgCarousel.tsx";
 
-export default function Card({ data }: { data: CardVM }) {
+export default function CardDetail({ data }: { data: CardVM }) {
   return (
-    <div className="card">
-      <div className="card-img-top">
+    <div className="card row flex-md-row">
+      <div className="col-12 col-md-4 pt-3">
         <ImgCarousel id={"card-img-carousel-" + data.id} imgs={data.images!} />
       </div>
-      <div className="card-body">
+      <div className="card-body col-12 col-md-4">
         <h3 className="card-title">{data.title}</h3>
         {/* ↓ CATEGORY ↓ */}
         <small>
@@ -42,16 +42,6 @@ export default function Card({ data }: { data: CardVM }) {
           ""
         )}
         {/* ↑ URL BUTTONS ↑ */}
-        {/* ↓ MORE INFO ↓ */}
-        <div className="card-footer">
-          <a
-            href={"/products/" + encodeURIComponent(data.title)}
-            className="text-center d-block"
-          >
-            Más info
-          </a>
-        </div>
-        {/* ↑ MORE INFO ↑ */}
       </div>
     </div>
   );

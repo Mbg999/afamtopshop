@@ -39,7 +39,7 @@ export class MySQLProductTagRepository extends ProductTagRepository<DBMySql> {
   async getTagsFromProductId(productId: string): Promise<ProductTag[]> {
     const conn = await this.dbConnection.getConnection();
     return await conn.query(
-      "SELECT * FROM product_tag WHERE productId LIKE ?",
+      "SELECT pt.*, t.name as tagName FROM product_tag pt JOIN tags t ON t.id LIKE pt.tagId WHERE pt.productId LIKE ?",
       [productId],
     ).catch((error) => {
       MySQLProductTagRepository.logError("getTagsFromProductId", error);
