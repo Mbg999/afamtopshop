@@ -1,7 +1,7 @@
 import { Head } from "$fresh/runtime.ts";
 import { PageProps } from "$fresh/server.ts";
 
-export default function Error404({ data }: { data: { errorMessage: string } }) {
+export default function Error404({ data }: { data?: { errorMessage?: string } }) {
   return (
     <>
       <Head>
@@ -17,7 +17,7 @@ export default function Error404({ data }: { data: { errorMessage: string } }) {
             alt="the Fresh logo: a sliced lemon dripping with juice"
           />
           <h1 class="text-4xl font-bold">
-            404 - {data.errorMessage ? data.errorMessage : "Page not found"}
+            404 - {data?.errorMessage ? data.errorMessage : "Page not found"}
           </h1>
           <p class="my-4">The page you were looking for doesn't exist.</p>
           <a href="/" class="underline">
