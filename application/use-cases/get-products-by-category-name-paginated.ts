@@ -1,17 +1,19 @@
 import { Product } from "../../domain/product.ts";
 import { productRepositoryImpl } from "../../persistence/repositories/repositories.impl.ts";
 
-export class GetLatestProductsPaginated {
+export class GetProductsByCategoryNamePaginated {
   constructor(
     private readonly productRepository = productRepositoryImpl(),
   ) {}
 
   invoke(
-    offset: number,
+    categoryName: string,
+    offset = 0,
     limit = 10,
     excludedIds?: string[],
   ): Promise<Product[]> {
-    return this.productRepository.getLatestPaginated(
+    return this.productRepository.getProductsByCategoryNamePaginated(
+      categoryName,
       offset,
       limit,
       excludedIds,

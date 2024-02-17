@@ -14,5 +14,40 @@ export abstract class ProductRepository<DBConnectionT>
   abstract getLatestPaginated(
     offset: number,
     limit: number,
+    excludedIds?: string[],
+  ): Promise<Product[]>;
+
+  abstract getRandomPaginated(
+    offset: number,
+    limit: number,
+    excludedIds?: string[],
+  ): Promise<Product[]>;
+
+  abstract getProductsByCategoryNamePaginated(
+    categoryId: string,
+    offset: number,
+    limit: number,
+    excludedIds?: string[],
+  ): Promise<Product[]>;
+
+  abstract getRandomProductsByCategoryNamePaginated(
+    categoryId: string,
+    offset: number,
+    limit: number,
+    excludedIds?: string[],
+  ): Promise<Product[]>;
+
+  abstract getProductsByTagNamePaginated(
+    tagId: string,
+    offset: number,
+    limit: number,
+    excludedIds?: string[],
+  ): Promise<Product[]>;
+
+  abstract getRandomProductsByTagNamePaginated(
+    tagId: string,
+    offset: number,
+    limit: number,
+    excludedIds?: string[],
   ): Promise<Product[]>;
 }

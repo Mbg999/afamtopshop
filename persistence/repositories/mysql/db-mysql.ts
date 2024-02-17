@@ -28,7 +28,7 @@ export class DBMySql extends DBBase<Client, ClientConfig> {
   closeConnection() {
     if (DBMySql.SINGLETON_CONNECTION) {
       DBMySql.SINGLETON_CONNECTION.close().finally(() => {
-        console.log("DB FINALLY CLOSE LLEGA");
+        console.log("DB FINALLY CLOSE");
         DBMySql.SINGLETON_CONNECTION = undefined;
       });
     }

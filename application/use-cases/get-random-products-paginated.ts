@@ -1,7 +1,7 @@
 import { Product } from "../../domain/product.ts";
 import { productRepositoryImpl } from "../../persistence/repositories/repositories.impl.ts";
 
-export class GetLatestProductsPaginated {
+export class GetRandomProductsPaginated {
   constructor(
     private readonly productRepository = productRepositoryImpl(),
   ) {}
@@ -11,7 +11,7 @@ export class GetLatestProductsPaginated {
     limit = 10,
     excludedIds?: string[],
   ): Promise<Product[]> {
-    return this.productRepository.getLatestPaginated(
+    return this.productRepository.getRandomPaginated(
       offset,
       limit,
       excludedIds,

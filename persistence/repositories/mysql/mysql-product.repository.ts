@@ -12,17 +12,25 @@ import {
   shopProductRepositoryImpl,
 } from "../repositories.impl.ts";
 import { Image } from "../../../domain/image.ts";
+import { excludeIds } from "./utils.ts";
 
 export class MySQLProductRepository extends ProductRepository<DBMySql> {
   constructor() {
     super(new DBMySql());
   }
 
-  async getLatestPaginated(offset: number, limit: number): Promise<Product[]> {
+  async getLatestPaginated(
+    offset: number,
+    limit: number,
+    excludedIds?: string[],
+  ): Promise<Product[]> {
     const conn = await this.dbConnection.getConnection();
     const products: Product[] = await conn.query(
-      "SELECT p.*, c.name as categoryName FROM products p JOIN categories c ON c.id LIKE p.categoryId ORDER BY createdAt DESC LIMIT ?, ?",
+      `SELECT p.*, c.name as categoryName FROM products p JOIN categories c ON c.id LIKE p.categoryId${
+        excludeIds("p.id", false, excludedIds)
+      }ORDER BY createdAt DESC LIMIT ?, ?`,
       [
+        ...(excludedIds ?? []),
         offset,
         limit,
       ],
@@ -30,6 +38,286 @@ export class MySQLProductRepository extends ProductRepository<DBMySql> {
       MySQLProductRepository.logError("getLatestPaginated", error);
       throw error;
     });
+
+    if (products.length < 1) {
+      return products;
+    }
+
+    const productIds = products.map((p) => p.id);
+
+    const imageRepository = imageRepositoryImpl();
+    const images: Image[] = await imageRepository.getAllFromMultipleProducts(
+      productIds,
+    );
+
+    const shopProductRepository = shopProductRepositoryImpl();
+    const urls: ShopProduct[] = await shopProductRepository
+      .getAllFromMultipleProducts(
+        productIds,
+      );
+
+    const productTagRepository = productTagRepositoryImpl();
+    const tags: ProductTag[] = await productTagRepository
+      .getAllFromMultipleProducts(
+        productIds,
+      );
+
+    products.forEach((p) => {
+      p.images = images.filter((i) => i.productId == p.id);
+      p.urls = urls.filter((u) => u.productId == p.id);
+      p.tags = tags.filter((t) => t.productId == p.id);
+    });
+
+    return products;
+  }
+
+  async getRandomPaginated(
+    offset: number,
+    limit: number,
+    excludedIds?: string[],
+  ): Promise<Product[]> {
+    const conn = await this.dbConnection.getConnection();
+    const products: Product[] = await conn.query(
+      `SELECT p.*, c.name as categoryName FROM products p JOIN categories c ON c.id LIKE p.categoryId${
+        excludeIds("p.id", false, excludedIds)
+      }ORDER BY RAND() DESC LIMIT ?, ?`,
+      [
+        ...(excludedIds ?? []),
+        offset,
+        limit,
+      ],
+    ).catch((error) => {
+      MySQLProductRepository.logError("getLatestPaginated", error);
+      throw error;
+    });
+
+    if (products.length < 1) {
+      return products;
+    }
+
+    const productIds = products.map((p) => p.id);
+
+    const imageRepository = imageRepositoryImpl();
+    const images: Image[] = await imageRepository.getAllFromMultipleProducts(
+      productIds,
+    );
+
+    const shopProductRepository = shopProductRepositoryImpl();
+    const urls: ShopProduct[] = await shopProductRepository
+      .getAllFromMultipleProducts(
+        productIds,
+      );
+
+    const productTagRepository = productTagRepositoryImpl();
+    const tags: ProductTag[] = await productTagRepository
+      .getAllFromMultipleProducts(
+        productIds,
+      );
+
+    products.forEach((p) => {
+      p.images = images.filter((i) => i.productId == p.id);
+      p.urls = urls.filter((u) => u.productId == p.id);
+      p.tags = tags.filter((t) => t.productId == p.id);
+    });
+
+    return products;
+  }
+
+  async getProductsByCategoryNamePaginated(
+    categoryName: string,
+    offset: number,
+    limit: number,
+    excludedIds?: string[],
+  ): Promise<Product[]> {
+    const conn = await this.dbConnection.getConnection();
+    const products: Product[] = await conn.query(
+      `SELECT p.*, c.name as categoryName FROM products p JOIN categories c ON c.id LIKE p.categoryId WHERE c.name LIKE ?${
+        excludeIds("p.id", true, excludedIds)
+      }ORDER BY createdAt DESC LIMIT ?, ?`,
+      [
+        categoryName,
+        ...(excludedIds ?? []),
+        offset,
+        limit,
+      ],
+    ).catch((error) => {
+      MySQLProductRepository.logError(
+        "getProductsByCategoryNamePaginated",
+        error,
+      );
+      throw error;
+    });
+
+    if (products.length < 1) {
+      return products;
+    }
+
+    const productIds = products.map((p) => p.id);
+
+    const imageRepository = imageRepositoryImpl();
+    const images: Image[] = await imageRepository.getAllFromMultipleProducts(
+      productIds,
+    );
+
+    const shopProductRepository = shopProductRepositoryImpl();
+    const urls: ShopProduct[] = await shopProductRepository
+      .getAllFromMultipleProducts(
+        productIds,
+      );
+
+    const productTagRepository = productTagRepositoryImpl();
+    const tags: ProductTag[] = await productTagRepository
+      .getAllFromMultipleProducts(
+        productIds,
+      );
+
+    products.forEach((p) => {
+      p.images = images.filter((i) => i.productId == p.id);
+      p.urls = urls.filter((u) => u.productId == p.id);
+      p.tags = tags.filter((t) => t.productId == p.id);
+    });
+
+    return products;
+  }
+
+  async getRandomProductsByCategoryNamePaginated(
+    categoryName: string,
+    offset: number,
+    limit: number,
+    excludedIds?: string[],
+  ): Promise<Product[]> {
+    const conn = await this.dbConnection.getConnection();
+    const products: Product[] = await conn.query(
+      `SELECT p.*, c.name as categoryName FROM products p JOIN categories c ON c.id LIKE p.categoryId WHERE c.name LIKE ?${
+        excludeIds("p.id", true, excludedIds)
+      }ORDER BY RAND() DESC LIMIT ?, ?`,
+      [
+        categoryName,
+        ...(excludedIds ?? []),
+        offset,
+        limit,
+      ],
+    ).catch((error) => {
+      MySQLProductRepository.logError(
+        "getRandomProductsByCategoryNamePaginated",
+        error,
+      );
+      throw error;
+    });
+
+    if (products.length < 1) {
+      return products;
+    }
+
+    const productIds = products.map((p) => p.id);
+    const imageRepository = imageRepositoryImpl();
+    const images: Image[] = await imageRepository.getAllFromMultipleProducts(
+      productIds,
+    );
+
+    const shopProductRepository = shopProductRepositoryImpl();
+    const urls: ShopProduct[] = await shopProductRepository
+      .getAllFromMultipleProducts(
+        productIds,
+      );
+
+    const productTagRepository = productTagRepositoryImpl();
+    const tags: ProductTag[] = await productTagRepository
+      .getAllFromMultipleProducts(
+        productIds,
+      );
+
+    products.forEach((p) => {
+      p.images = images.filter((i) => i.productId == p.id);
+      p.urls = urls.filter((u) => u.productId == p.id);
+      p.tags = tags.filter((t) => t.productId == p.id);
+    });
+
+    return products;
+  }
+
+  async getProductsByTagNamePaginated(
+    tagName: string,
+    offset: number,
+    limit: number,
+    excludedIds?: string[],
+  ): Promise<Product[]> {
+    const conn = await this.dbConnection.getConnection();
+    const products: Product[] = await conn.query(
+      `SELECT p.*, c.name as categoryName FROM products p JOIN categories c ON c.id LIKE p.categoryId JOIN product_tag pt ON pt.productId LIKE p.id JOIN tags t ON t.id LIKE pt.tagId WHERE t.name LIKE ?${
+        excludeIds("p.id", true, excludedIds)
+      }ORDER BY p.createdAt DESC LIMIT ?, ?`,
+      [
+        tagName,
+        ...(excludedIds ?? []),
+        offset,
+        limit,
+      ],
+    ).catch((error) => {
+      MySQLProductRepository.logError("getProductsByTagNamePaginated", error);
+      throw error;
+    });
+
+    if (products.length < 1) {
+      return products;
+    }
+
+    const productIds = products.map((p) => p.id);
+
+    const imageRepository = imageRepositoryImpl();
+    const images: Image[] = await imageRepository.getAllFromMultipleProducts(
+      productIds,
+    );
+
+    const shopProductRepository = shopProductRepositoryImpl();
+    const urls: ShopProduct[] = await shopProductRepository
+      .getAllFromMultipleProducts(
+        productIds,
+      );
+
+    const productTagRepository = productTagRepositoryImpl();
+    const tags: ProductTag[] = await productTagRepository
+      .getAllFromMultipleProducts(
+        productIds,
+      );
+
+    products.forEach((p) => {
+      p.images = images.filter((i) => i.productId == p.id);
+      p.urls = urls.filter((u) => u.productId == p.id);
+      p.tags = tags.filter((t) => t.productId == p.id);
+    });
+
+    return products;
+  }
+
+  async getRandomProductsByTagNamePaginated(
+    tagName: string,
+    offset: number,
+    limit: number,
+    excludedIds?: string[],
+  ): Promise<Product[]> {
+    const conn = await this.dbConnection.getConnection();
+    const products: Product[] = await conn.query(
+      `SELECT p.*, c.name as categoryName FROM products p JOIN categories c ON c.id LIKE p.categoryId JOIN product_tag pt ON pt.productId LIKE p.id JOIN tags t ON t.id LIKE pt.tagId WHERE t.name LIKE ?${
+        excludeIds("p.id", true, excludedIds)
+      }ORDER BY RAND() DESC LIMIT ?, ?`,
+      [
+        tagName,
+        ...(excludedIds ?? []),
+        offset,
+        limit,
+      ],
+    ).catch((error) => {
+      MySQLProductRepository.logError(
+        "getRandomProductsByTagNamePaginated",
+        error,
+      );
+      throw error;
+    });
+
+    if (products.length < 1) {
+      return products;
+    }
 
     const productIds = products.map((p) => p.id);
 

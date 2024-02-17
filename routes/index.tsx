@@ -8,6 +8,7 @@ export default async function Prueba() {
   return (
     <div>
       <CardGrid cards={cards} />
+      <h3>agregar paginacion</h3>
     </div>
   );
 }
